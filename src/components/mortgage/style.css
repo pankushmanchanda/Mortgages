@@ -1,0 +1,146 @@
+.acc-m{
+    margin:30px;
+    margin-left: 3%;
+    width: 80% ! important
+}
+.same-row{
+    display: flex;
+}
+.radio-space{
+    margin-right: 5px;
+    margin-top: 5px
+}
+.name-space{
+    width: 300px;
+    display: flex;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+.name-spaced{
+    width: 300px;
+    display: flex;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+.errorAlert{
+    border-color: rgb(247, 12, 12);
+}
+.name-wd{
+    width: 95px;  
+    margin-top: 10px;
+}
+.space-checkbox{
+margin-top: 5px
+}
+.btn-style{
+    border: 0;
+    max-width: 70%;
+}
+
+.heading-m{
+    margin: 15px;
+}
+
+.head-m{
+    margin-top: 10px;
+}
+.border-margin{
+    border: 0;
+    margin-left: 20px;
+}
+
+.top-align{
+    margin-top: 15px;
+    display:flex;
+}
+.modalEdit{
+    margin-left: 30%;
+    height: fit-content;
+    margin-top: 150px;
+}
+
+
+.aip-preview-screen .my-financials-preview{
+    align-items: left !important;
+    font-size:25px;
+    font-weight:800;
+    color:#006a4d!important;
+}
+.aip-preview-screen .my-financials-container{
+    min-width:90%;
+    margin:10px 20px 10px 0px;
+    background-color:white;
+    display:flex;
+    padding:10px 20px;
+}
+.aip-preview-screen .my-financials-first{
+flex:50%;
+padding-left:20px;
+}
+.aip-preview-screen .my-financials-second{
+    flex:50%;
+    padding-top:30px;
+    padding-right:10px;
+    padding:30px 88px 20px 73px;
+}
+
+
+.accordianCard {
+    margin-bottom: 1%;
+    border-radius: 9px !important;
+  }
+  .card{width:1000px}
+
+  .online{
+      font-size:18px;
+      margin: 0
+  }
+  .card .accordianCard .cards{
+      margin:2%
+  }
+  #my-financials-paragraph{
+   display:flex;
+   margin-top: 0px
+
+  }
+  #accordians{
+    display:flex;
+    width: 100%;
+     color: #00864f;
+     flex-wrap: wrap;
+     justify-content: space-between
+     
+  }
+  
+@media screen and (max-width : 1000px){ 
+    .aip-preview-screen .my-financials-container{
+        
+        margin:10px 20px;
+        background-color:white;
+        display: block;
+        
+    }
+    .aip-preview-screen .my-financials-first{
+        
+        padding: 5%
+        }
+    .aip-preview-screen .my-financials-second{
+        
+        padding-top:30px;
+        padding-right:10px;
+        padding:5%;
+       
+    }
+    #my-financials-paragraph{
+        display:block;
+        margin-top: 0px
+     
+       }
+      
+}
+
+@media (max-width: 575px) {
+    .sidebar-container {
+      flex-direction: column;
+    }
+  }
