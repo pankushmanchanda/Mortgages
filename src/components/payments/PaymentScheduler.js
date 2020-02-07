@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 // import { PDFViewer } from '@react-pdf/renderer';
 // import ReactPDF from '@react-pdf/renderer';
 import html2canvas from 'html2canvas';
-// import jsPDF from 'jspdf';
+import jsPDF from 'jspdf';
 class PaymentScheduler extends React.Component {
     constructor() {
         super();
@@ -242,7 +242,18 @@ class PaymentScheduler extends React.Component {
     //         });
     //     return res;
     // }
-
+    printDocument() {
+        const input = document.getElementById('divToPrint');
+        html2canvas(input)
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF();
+                pdf.addImage(imgData, 'JPEG', 0, 0);
+                // pdf.output('dataurlnewwindow');
+                pdf.save(this.state.user.id + ".pdf");
+            })
+            ;
+    }
     async fetchData(e) {
 
         if (this.state.search !== '') {
@@ -253,6 +264,7 @@ class PaymentScheduler extends React.Component {
                 localStorage.setItem('reqId', id)
                 const res = await axios.get(`${Data.url}/users/${id}`)
                     .then(res => {
+                        debugger
                         console.log(res.data, "data")
                         this.setState({
                             user: res.data
@@ -487,7 +499,7 @@ class PaymentScheduler extends React.Component {
             </div>
         )
         return (
-            <div className="head-m" style={{ backgroundColor: '#f5f6fa', paddingBottom: '45px', marginTop: '0px' }}>
+            <div id="divToPrint" className="head-m" style={{ backgroundColor: '#f5f6fa', paddingBottom: '45px', marginTop: '0px' }}>
                 <div style={{ display: 'flex' }}>
                     <h2 className="heading-m">
                         Payment Scheduler
@@ -508,8 +520,7 @@ class PaymentScheduler extends React.Component {
                             <p>
                                 Principal amount: £{this.state.user.expLoans.principle}, Tenure: {this.state.user.expLoans.tenure} months and interest:{this.state.user.expLoans.intrest}%
 
-                                    <Button style={{ float: 'right', marginBottom: '10px', backgroundColor: 'green', borderColor: 'green' }} >Download </Button>
-
+                                    <Button style={{ float: 'right', marginBottom: '10px', backgroundColor: 'green', borderColor: 'green' }} onClick={() => { this.printDocument() } }>Download </Button>
                             </p>
 
                         }

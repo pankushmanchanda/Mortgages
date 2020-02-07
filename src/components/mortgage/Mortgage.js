@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { withRouter } from 'react-router'
 import axios from 'axios'
 import { Accordion, Icon, Dropdown, Table, Radio, Select, Modal } from 'semantic-ui-react'
@@ -226,13 +225,18 @@ class Mortgage extends React.Component {
         })
 
     }
-    async deleteFile() {
-        debugger;
+    async deleteFile(index, itemAttributes) {
+        debugger
         this.setState({
-            totalProperty: { ...this.state.totalProperty, file1: undefined }
-        })
+            totalProperty: [
+                ...this.state.totalProperty.slice(0, index),
+                Object.assign({}, this.state.totalProperty[index], itemAttributes),
+                ...this.state.totalProperty.slice(index + 1)
+            ]
+        });
 
-        let i = this.state.totalProperty;
+
+        let p = this.state.totalProperty;
     }
     async fetchKey() {
         debugger
@@ -427,95 +431,191 @@ class Mortgage extends React.Component {
         var newFile1;
         var newFile2;
         var newFile3;
+        let property = [];
+        let id;
+        let availableProperty;
+        let newTotalProperty
         debugger;
+        let data = new FormData();
         this.setState({
             tab: true, open: false,
             property: { ...this.state.property }
 
         });
-        let property = [];
-        if (this.state.reqId) {
-            property[0] = this.state.property;
-        } else {
-            property.push({ ...this.state.property });
-            this.setState({
-                totalProperty: property,
-                tab: true
 
-            }, () => {
-                console.log("icon clicked", this.state.totalProperty);
-            })
+        if (this.state.totalProperty.length > 0) {
+            property = this.state.totalProperty;
         }
-
-
-        // this.setState({
-        //     totalProperty: property
-
-        // });
         this.propValue.value = "";
         let tot = this.state.totalUser + 1;
-        let id;
         if (this.state.reqId) {
             id = this.state.reqId;
         } else {
             id = `Req${('000000' + tot).slice(-5)}`;
         }
-
-        let l = property.length;
-        let file1 = property[l - 1].file1;
-        let file2 = property[l - 1].file2;
-        let file3 = property[l - 1].file3;
-        let data = new FormData()
         data.append('id', id)
-        data.append('file1', file1)
-        data.append('file2', file2)
-        data.append('file3', file3)
-        console.log(data, "......uplaod datass");
-        debugger
-        var newTotalProperty = property;
-        newTotalProperty[l - 1].propertyType = property[l - 1].propertyType;
-        newTotalProperty[l - 1].assestValue = property[l - 1].assestValue;
-        if (property[l - 1].file1) {
-            newFile1 = {
-                'lastModified': property[l - 1].file1.lastModified,
-                'lastModifiedDate': property[l - 1].file1.lastModifiedDate,
-                'name': property[l - 1].file1.name,
-                'size': property[l - 1].file1.size,
-                'type': property[l - 1].file1.type
-            };
-            newTotalProperty[l - 1]["file1"] = newFile1;
-        }
-        if (property[l - 1].file2) {
-            newFile2 = {
-                'lastModified': property[l - 1].file2.lastModified,
-                'lastModifiedDate': property[l - 1].file2.lastModifiedDate,
-                'name': property[l - 1].file2.name,
-                'size': property[l - 1].file2.size,
-                'type': property[l - 1].file2.type
-            };
-            newTotalProperty[l - 1]["file2"] = newFile2;
-        }
-        if (property[l - 1].file3) {
-            newFile3 = {
-                'lastModified': property[l - 1].file3.lastModified,
-                'lastModifiedDate': property[l - 1].file3.lastModifiedDate,
-                'name': property[l - 1].file3.name,
-                'size': property[l - 1].file3.size,
-                'type': property[l - 1].file3.type
-            };
+        // if (this.state.reqId) {
+            availableProperty = this.state.totalProperty.find((item, i) => {
+                if (item.propertyType.toUpperCase() == this.state.property.propertyType.toUpperCase()) {
+                    property[i] = this.state.property;
+                    property[i].file1 = this.state.property.file1 ? this.state.property.file1 : item.file1;
+                    property[i].file2 = this.state.property.file2 ? this.state.property.file2 : item.file2;
+                    property[i].file3 = this.state.property.file3 ? this.state.property.file3 : item.file3;
+                    let file1 = property[i].file1;
+                    let file2 = property[i].file2;
+                    let file3 = property[i].file3;
+                    data.append('file1', file1)
+                    data.append('file2', file2)
+                    data.append('file3', file3)
+                    newTotalProperty = property;
+                    newTotalProperty[i].propertyType = property[i].propertyType;
+                    newTotalProperty[i].assestValue = property[i].assestValue;
+                    if (property[i].file1) {
+                        newFile1 = {
+                            'lastModified': property[i].file1.lastModified,
+                            'lastModifiedDate': property[i].file1.lastModifiedDate,
+                            'name': property[i].file1.name,
+                            'size': property[i].file1.size,
+                            'type': property[i].file1.type
+                        };
+                        newTotalProperty[i]["file1"] = newFile1;
+                    }
+                    if (property[i].file2) {
+                        newFile2 = {
+                            'lastModified': property[i].file2.lastModified,
+                            'lastModifiedDate': property[i].file2.lastModifiedDate,
+                            'name': property[i].file2.name,
+                            'size': property[i].file2.size,
+                            'type': property[i].file2.type
+                        };
+                        newTotalProperty[i]["file2"] = newFile2;
+                    }
+                    if (property[i].file3) {
+                        newFile3 = {
+                            'lastModified': property[i].file3.lastModified,
+                            'lastModifiedDate': property[i].file3.lastModifiedDate,
+                            'name': property[i].file3.name,
+                            'size': property[i].file3.size,
+                            'type': property[i].file3.type
+                        };
 
-            newTotalProperty[l - 1]["file3"] = newFile3;
-        }
+                        newTotalProperty[i]["file3"] = newFile3;
+                    }
 
+                    return true;
+                }
+            });
+            if (!availableProperty) {
+                property.push({ ...this.state.property });
+            }
+        // } else {
+        //     availableProperty = this.state.totalProperty.find((item, i) => {
+        //         if (item.propertyType.toUpperCase() == this.state.property.propertyType.toUpperCase()) {
+        //             property[i] = this.state.property;
+        //             property[i].file1 = this.state.property.file1 ? this.state.property.file1 : item.file1;
+        //             property[i].file2 = this.state.property.file2 ? this.state.property.file2 : item.file2;
+        //             property[i].file3 = this.state.property.file3 ? this.state.property.file3 : item.file3;
+        //             let file1 = property[i].file1;
+        //             let file2 = property[i].file2;
+        //             let file3 = property[i].file3;
+        //             data.append('file1', file1)
+        //             data.append('file2', file2)
+        //             data.append('file3', file3)
+        //             newTotalProperty = property;
+        //             newTotalProperty[i].propertyType = property[i].propertyType;
+        //             newTotalProperty[i].assestValue = property[i].assestValue;
+        //             if (property[i].file1) {
+        //                 newFile1 = {
+        //                     'lastModified': property[i].file1.lastModified,
+        //                     'lastModifiedDate': property[i].file1.lastModifiedDate,
+        //                     'name': property[i].file1.name,
+        //                     'size': property[i].file1.size,
+        //                     'type': property[i].file1.type
+        //                 };
+        //                 newTotalProperty[i]["file1"] = newFile1;
+        //             }
+        //             if (property[i].file2) {
+        //                 newFile2 = {
+        //                     'lastModified': property[i].file2.lastModified,
+        //                     'lastModifiedDate': property[i].file2.lastModifiedDate,
+        //                     'name': property[i].file2.name,
+        //                     'size': property[i].file2.size,
+        //                     'type': property[i].file2.type
+        //                 };
+        //                 newTotalProperty[i]["file2"] = newFile2;
+        //             }
+        //             if (property[i].file3) {
+        //                 newFile3 = {
+        //                     'lastModified': property[i].file3.lastModified,
+        //                     'lastModifiedDate': property[i].file3.lastModifiedDate,
+        //                     'name': property[i].file3.name,
+        //                     'size': property[i].file3.size,
+        //                     'type': property[i].file3.type
+        //                 };
+
+        //                 newTotalProperty[i]["file3"] = newFile3;
+        //             }
+
+        //             return true;
+        //         }
+        //     });
+        //     if (!availableProperty) {
+        //         property.push({ ...this.state.property });
+        //     }
+        // }
+
+
+        if (!availableProperty) {
+            let l = property.length;
+            let file1 = property[l - 1].file1;
+            let file2 = property[l - 1].file2;
+            let file3 = property[l - 1].file3;
+
+            data.append('file1', file1)
+            data.append('file2', file2)
+            data.append('file3', file3)
+            console.log(data, "......uplaod datass");
+            newTotalProperty = property;
+            newTotalProperty[l - 1].propertyType = property[l - 1].propertyType;
+            newTotalProperty[l - 1].assestValue = property[l - 1].assestValue;
+            if (property[l - 1].file1) {
+                newFile1 = {
+                    'lastModified': property[l - 1].file1.lastModified,
+                    'lastModifiedDate': property[l - 1].file1.lastModifiedDate,
+                    'name': property[l - 1].file1.name,
+                    'size': property[l - 1].file1.size,
+                    'type': property[l - 1].file1.type
+                };
+                newTotalProperty[l - 1]["file1"] = newFile1;
+            }
+            if (property[l - 1].file2) {
+                newFile2 = {
+                    'lastModified': property[l - 1].file2.lastModified,
+                    'lastModifiedDate': property[l - 1].file2.lastModifiedDate,
+                    'name': property[l - 1].file2.name,
+                    'size': property[l - 1].file2.size,
+                    'type': property[l - 1].file2.type
+                };
+                newTotalProperty[l - 1]["file2"] = newFile2;
+            }
+            if (property[l - 1].file3) {
+                newFile3 = {
+                    'lastModified': property[l - 1].file3.lastModified,
+                    'lastModifiedDate': property[l - 1].file3.lastModifiedDate,
+                    'name': property[l - 1].file3.name,
+                    'size': property[l - 1].file3.size,
+                    'type': property[l - 1].file3.type
+                };
+
+                newTotalProperty[l - 1]["file3"] = newFile3;
+            }
+
+        }
         this.setState({
             totalProperty: newTotalProperty
         }, () => {
             console.log("icon clicked", this.state.totalProperty);
         })
-
-
-
-
         const res = await axios.post("http://localhost:4000/upload", data)
             .then(res => {
                 console.log(res.data, "hello")
@@ -839,7 +939,7 @@ class Mortgage extends React.Component {
                     <Modal.Content>
                         <div className="name-space">
                             <div className="name-wd" >
-                                MorgagedDoc:
+                                MortgageDoc:
                             </div >
                             <div className="ui input"><input type="file" name="morgageDoc" style={{ border: '0px' }}
                                 onChange={(e) => this.handleUpload(e)}
@@ -961,12 +1061,12 @@ class Mortgage extends React.Component {
                                 <Table.Cell> £ {property.assestValue}</Table.Cell>
                                 <Table.Cell>
                                     <div >MorgagedDoc : <a href="javascript:;" onClick={() => this.download(this.state.reqId, (property.file1 ? property.file1.name : ''))}>{property.file1 ? property.file1.name : ' '} </a>
-                                        <Icon size="small" inverted name='delete' className="searchIcon" color='black' link onClick={() => this.deleteFile()} /></div>
+                                        {property.file1 && <Icon size="small" inverted name='delete' className="searchIcon" color='black' link onClick={() => this.deleteFile(i, { file1: undefined })} />}</div>
                                     <div >AadhaarCard : <a href="javascript:;" onClick={() => this.download(this.state.reqId, (property.file2 ? property.file2.name : ''))}>{property.file2 ? property.file2.name : ' '}</a>
-                                        <Icon size="small" inverted name='delete' className="searchIcon" color='black' link onClick={() => this.deleteFile()} /></div>
+                                        {property.file2 && <Icon size="small" inverted name='delete' className="searchIcon" color='black' link onClick={() => this.deleteFile(i, { file2: undefined })} />}</div>
                                     <div>PanCard : <a href="javascript:;" onClick={() => this.download(this.state.reqId, (property.file3 ? property.file3.name : ''))}>{property.file3 ? property.file3.name : ' '}
                                     </a>
-                                        <Icon size="small" inverted name='delete' className="searchIcon" color='black' link onClick={() => this.deleteFile()} /></div></Table.Cell>
+                                        {property.file3 && <Icon size="small" inverted name='delete' className="searchIcon" color='black' link onClick={() => this.deleteFile(i, { file3: undefined })} />}</div></Table.Cell>
                             </Table.Row>
 
                         })
@@ -1380,7 +1480,7 @@ class Mortgage extends React.Component {
                                                     selection
                                                     options={AssetType}
                                                     defaultValue={value}
-                                                    // value={this.state.property ? this.state.property.propertyType : ''}
+                                                    value={this.state.totalProperty ? this.state.property.propertyType : ''}
 
                                                     />
                                             </div>
