@@ -27,7 +27,7 @@
     "@fortawesome/fontawesome-free": "^5.11.2"
   },
   "scripts": {
-    "start": "REACT_APP_ENV=production react-scripts start",
+    "start": "set REACT_APP_ENV=production && react-scripts start",
     "dev": "set REACT_APP_ENV=development && npm run win",
     "win": "react-scripts start",
     "build": "react-scripts build",
