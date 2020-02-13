@@ -13,7 +13,7 @@ const dev = {
 };
 
 const prod = {
-    url: "https://my-json-server-deploy.herokuapp.com"
+    url: "https://json-server-mortgage.herokuapp.com"
 };
 
 const Data = process.env.REACT_APP_STAGE === 'production'
